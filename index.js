@@ -13,5 +13,7 @@ import SectionListBasics from './views/SectionListBasics'
 import FetchExample from './views/FetchExample'
 import MovieList from './views/MovieList'
 import Animate from './views/Animate'
+import FlatListDemo from './views/FlatListDemo'
+import Demo1 from './views/Demo1'
 
-AppRegistry.registerComponent(appName, () => Animate);
+AppRegistry.registerComponent(appName, () => FlatListDemo);
