@@ -15,6 +15,7 @@ import MovieList from './views/MovieList'
 import Animate from './views/Animate'
 import FlatListDemo from './views/FlatListDemo'
 import Demo1 from './views/Demo1'
-import AppNavigation from './AppNavigation'
+import AppNavigationStack from './AppNavigationStack'
+import AppNavigationTab from './AppNavigationTab'
 
-AppRegistry.registerComponent(appName, () => AppNavigation);
+AppRegistry.registerComponent(appName, () => AppNavigationTab);
