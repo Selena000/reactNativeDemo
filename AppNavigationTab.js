@@ -1,79 +1,47 @@
 import React, { Component } from 'react'
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs'
 // import { MaterialCommunityIcons } from 'react-native-vector-icons';
 // import Icon from 'react-native-vector-icons/Ionicons'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect, Provider } from 'react-redux'
+import { 
+  createReactNavigationReduxMiddleware, 
+  createReduxContainer
+} from 'react-navigation-redux-helpers'
+import { createStore, applyMiddleware } from 'redux'
 
-import Home from './views/Screen/Home'
-import Detail from './views/Screen/Detail'
-import DetailChild from './views/Screen/DetailChild'
-import Welcome from './views/Screen/Welcome'
+import AppContainter from './views/Screen/Index'
+import appReducer from './reducer'
+import { StatusBar } from 'react-native'
 
-
-const TabNavigator = createBottomTabNavigator({
-  Home: {
-    screen: Home,
-    navigationOptions: {
-      title: '首页',
-      // headerBackTitle: '返回首页'
-      // tabBarIcon: ({ color, size }) => (
-      //   <MaterialCommunityIcons name="home" color={color} size={size} />
-      // )
-      tabBarIcon: ({ tintColor, focused }) => (
-        <Icon name={"home"} size={26} style={{ color: tintColor }} />
-      )
-    }
-  },
-  Detail: {
-    screen: Detail,
-    navigationOptions: {
-      title: '详情',
-      // tabBarIcon: ({ color, size }) => (
-      //   <MaterialCommunityIcons name="bell" color={color} size={size} />
-      // )
-      // tabBarIcon: 
-      // headerBackTitle: '返回详情页'
-    }
-  },
-  DetailChild: {
-    screen: DetailChild,
-    navigationOptions: {
-      title: 'child',
-      // tabBarIcon: ({ color, size }) => (
-      //   <MaterialCommunityIcons name="account" color={color} size={size} />
-      // )
-      // headerBackTitle: '返回详情页'
-    }
+const middleware = createReactNavigationReduxMiddleware(
+  state => state.nav,
+  'root'
+)
+const AppReduxContainer = createReduxContainer(AppContainter)
+const mapStateToProps = state => {
+  return {
+    state: state.nav
   }
-}, {
-  initialRouteName: 'Home',
-  defaultNavigationOptions: {
-    // headerStyle: {
-    //   backgroundColor: 'blue'
-    // }
-    activeTintColor: '#e91e63'
+}
+const store = createStore(appReducer, applyMiddleware(middleware));
+const AppWithNavigationState = connect(mapStateToProps)(AppReduxContainer);
+
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <StatusBar barStyle="light-content"></StatusBar>
+          <AppWithNavigationState/>
+      </Provider>
+    )
   }
-})
+}
 
-const InitNavigator = createStackNavigator({
-  Welcome: {
-    screen: Welcome,
-    navigationOptions: {
-      header: null
-    }
-  }
-})
+export default App
 
-const SwitchNavigator = createSwitchNavigator({
-  Init: InitNavigator,
-  Main: TabNavigator
-})
 
-const AppNavigator = createAppContainer(SwitchNavigator)
 
-export default AppNavigator
+// export default AppNavigator
+// export default connect(mapStateToProps)(AppWithNavigationState)
 
 // export default class App extends Component {
 //   render() {
